@@ -2,31 +2,23 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import '../styles/styles.css';
 
-interface FormValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-}
-
 export const FormikYupPage = () => {
   const {
-    handleChange,
     handleSubmit,
-    handleBlur,
+    getFieldProps,
     touched,
     errors: {
       firstName: firstNameError,
       lastName: lastNameError,
       email: emailError,
     },
-    values: { firstName, lastName, email },
   } = useFormik({
     initialValues: {
       firstName: '',
       lastName: '',
       email: '',
     },
-    onSubmit: (values: FormValues) => {
+    onSubmit: (values) => {
       console.log(values);
     },
     validationSchema: Yup.object({
@@ -46,32 +38,14 @@ export const FormikYupPage = () => {
       <h1>Formik Yup tutorial</h1>
       <form onSubmit={handleSubmit} noValidate>
         <label htmlFor="firstName">First name</label>
-        <input
-          type="text"
-          name="firstName"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={firstName}
-        />
+        <input type="text" {...getFieldProps('firstName')} />
         {touched.firstName && firstNameError && <span>{firstNameError}</span>}
 
         <label htmlFor="lastName">Last name</label>
-        <input
-          type="text"
-          name="lastName"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={lastName}
-        />
+        <input type="text" {...getFieldProps('lastName')} />
         {touched.lastName && lastNameError && <span>{lastNameError}</span>}
         <label htmlFor="email">Email Address</label>
-        <input
-          type="email"
-          name="email"
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={email}
-        />
+        <input type="email" {...getFieldProps('email')} />
         {touched.email && emailError && <span>{emailError}</span>}
         <button type="submit">Enviar</button>
       </form>
