@@ -15,6 +15,15 @@ for (const input of formJson) {
     if (rule.type === 'required') {
       schema = schema.required('Este campo es requerido');
     }
+    if (rule.type === 'minLength') {
+      schema = schema.min(
+        (rule as any).value || 2,
+        `Mínimo de ${(rule as any).value || 2} caracteres`
+      );
+    }
+    if (rule.type === 'email') {
+      schema = schema.email('Formato del email incorrecto');
+    }
     /// ... otras reglas
   }
   requiredFields[input.name] = schema;
