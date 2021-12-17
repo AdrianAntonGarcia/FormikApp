@@ -2,11 +2,22 @@ import formJson from '../data/custom-form.json';
 import { Formik, Form } from 'formik';
 import { MyTextInput } from '../components';
 import { MySelect } from '../components/MySelect';
+import * as Yup from 'yup';
 
 const initalValues: { [x: string]: any } = {};
+const requiredFields: { [x: string]: any } = {};
 
 for (const input of formJson) {
   initalValues[input.name] = input.value;
+  if (!input.validations) continue;
+  let schema = Yup.string();
+  for (const rule of input.validations) {
+    if (rule.type === 'required') {
+      schema = schema.required('Este campo es requerido');
+    }
+    /// ... otras reglas
+  }
+  requiredFields[input.name] = schema;
 }
 
 export const DynamicForm = () => {
@@ -18,6 +29,7 @@ export const DynamicForm = () => {
         onSubmit={(values) => {
           console.log(values);
         }}
+        validationSchema={Yup.object({ ...requiredFields })}
       >
         {() => (
           <Form noValidate>
